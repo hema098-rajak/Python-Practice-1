@@ -1,5 +1,6 @@
 Basic Python Program learning and Practice.
-🐍 Python Practice – Day 1
+
+#🐍 Python Practice – Day 1
 🚀 About This Repository
 This repository contains my Day 1 Python practice, where I explored the basics of Python programming, modules, and working environment setup. I also solved beginner-level exercises to strengthen my understanding.
 
