@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StressSense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #1b2a2e;
+    --bg-panel: #25383d;
+    --sage: #9fc6b8;
+    --sage-soft: #4f6e68;
+    --cream: #f4f1ea;
+    --amber: #e8b87a;
+    --rose: #d98b8b;
+    --text-dim: #aebfbc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-deep);
+    color: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(159,198,184,0.07), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(217,139,139,0.06), transparent 40%);
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-panel);
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+  }
+
+  .header .live-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .live-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sage);
+    box-shadow: 0 0 0 0 rgba(159,198,184, 0.6);
+    animation: ping 2s infinite;
+  }
+
+  @keyframes ping {
+    0% { box-shadow: 0 0 0 0 rgba(159,198,184, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(159,198,184, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(159,198,184, 0); }
+  }
+
+  /* Pulse waveform signature element */
+  .wave-zone {
+    position: relative;
+    height: 90px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: rgba(0,0,0,0.18);
+  }
+
+  .wave-zone svg {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 200%;
+    height: 60px;
+    animation: scroll-wave 3s linear infinite;
+  }
+
+  @keyframes scroll-wave {
+    from { transform: translate(0, -50%); }
+    to { transform: translate(-50%, -50%); }
+  }
+
+  .wave-zone path {
+    stroke: var(--sage);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Status section */
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 24px 0 8px;
+  }
+
+  .status-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .status-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    margin-top: 4px;
+    transition: color 0.4s ease;
+  }
+
+  .status-value.low { color: var(--sage); }
+  .status-value.medium { color: var(--amber); }
+  .status-value.high { color: var(--rose); }
+
+  .badge {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid currentColor;
+  }
+
+  .badge.low { color: var(--sage); }
+  .badge.medium { color: var(--amber); }
+  .badge.high { color: var(--rose); }
+
+  /* Metrics grid */
+  .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .metric {
+    background: rgba(0,0,0,0.18);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .metric .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .metric .value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  .metric .unit {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  /* Suggestion */
+  .suggestion {
+    background: linear-gradient(135deg, rgba(159,198,184,0.12), rgba(159,198,184,0.04));
+    border: 1px solid rgba(159,198,184,0.2);
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .suggestion .icon {
+    font-size: 22px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .suggestion .text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--cream);
+  }
+
+  .suggestion .text strong {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sage);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 380px) {
+    .status-value { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <h1>StressSense</h1>
+    <div class="live-dot">Live</div>
+  </div>
+
+  <div class="wave-zone">
+    <svg viewBox="0 0 400 60" preserveAspectRatio="none">
+      <path d="M0,30 L20,30 L28,10 L36,50 L44,30 L60,30 L68,15 L76,45 L84,30 L120,30 L128,10 L136,50 L144,30 L160,30 L168,15 L176,45 L184,30 L200,30 L208,10 L216,50 L224,30 L240,30 L248,15 L256,45 L264,30 L300,30 L308,10 L316,50 L324,30 L340,30 L348,15 L356,45 L364,30 L400,30"/>
+    </svg>
+  </div>
+
+  <div class="status-row">
+    <div>
+      <div class="status-label">Stress Level</div>
+      <div class="status-value medium" id="stressLevel">Medium</div>
+    </div>
+    <div class="badge medium" id="stressBadge">Moderate</div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric">
+      <div class="label">Heart Rate</div>
+      <div class="value" id="heartRate">78<span class="unit">bpm</span></div>
+    </div>
+    <div class="metric">
+      <div class="label">SpO2</div>
+      <div class="value" id="spo2">97<span class="unit">%</span></div>
+    </div>
+  </div>
+
+  <div class="suggestion">
+    <div class="icon">🌿</div>
+    <div class="text">
+      <strong>Suggestion</strong>
+      <span id="suggestionText">Take a short walk and try 5 deep breaths — your heart rate is slightly elevated.</span>
+    </div>
+  </div>
+
+  <div class="footer">Updates every 2 seconds · ESP32 + MAX30100</div>
+</div>
+
+<script>
+  // ---- DUMMY DATA PREVIEW ----
+  // This cycles through Low / Medium / High every few seconds
+  // so you can see how the design looks in each state.
+  // Replace this section later with real fetch() calls to your Python server.
+
+  const states = {
+    low: {
+      level: "Low", badge: "Calm", className: "low",
+      hr: 64, spo2: 98,
+      suggestion: "Great rhythm. Stay hydrated and keep up the good pace."
+    },
+    medium: {
+      level: "Medium", badge: "Moderate", className: "medium",
+      hr: 88, spo2: 97,
+      suggestion: "Heart rate is rising. Try 5 slow breaths — in for 4 seconds, out for 6."
+    },
+    high: {
+      level: "High", badge: "Elevated", className: "high",
+      hr: 108, spo2: 95,
+      suggestion: "Stress detected. Pause for 2 minutes, step away from your screen, and breathe deeply."
+    }
+  };
+
+  const order = ["low", "medium", "high"];
+  let i = 0;
+
+  function applyState(stateKey) {
+    const s = states[stateKey];
+    const levelEl = document.getElementById("stressLevel");
+    const badgeEl = document.getElementById("stressBadge");
+
+    levelEl.textContent = s.level;
+    levelEl.className = "status-value " + s.className;
+
+    badgeEl.textContent = s.badge;
+    badgeEl.className = "badge " + s.className;
+
+    document.getElementById("heartRate").innerHTML = s.hr + '<span class="unit">bpm</span>';
+    document.getElementById("spo2").innerHTML = s.spo2 + '<span class="unit">%</span>';
+    document.getElementById("suggestionText").textContent = s.suggestion;
+  }
+
+  applyState(order[0]);
+
+  setInterval(() => {
+    i = (i + 1) % order.length;
+    applyState(order[i]);
+  }, 3000);
+</script>
+
+</body>
+</html>
