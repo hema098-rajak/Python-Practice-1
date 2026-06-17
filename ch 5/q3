@@ -1,0 +1,8 @@
+# can we have a set with 18 (int) and '18'(str) as value in it. And what will be the length if length of the set.
+s = set()
+s.add(18)
+s.add('18')
+s.add(18.0) # set only consists one no. at a time.
+
+
+print(s)
